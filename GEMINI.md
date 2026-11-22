@@ -19,24 +19,19 @@ The project uses `uv` for dependency management and tool installation.
 
 ### Installation
 
-**From PyPI (Recommended):**
+**Local `.venv` editable install (Recommended — do NOT install globally):**
 ```bash
-uv tool install notebooklm-mcp-cli
-# or: pip install notebooklm-mcp-cli
-```
-
-**From Source (Development):**
-```bash
-git clone https://github.com/YOUR_USERNAME/notebooklm-mcp.git
-cd notebooklm-mcp
-uv tool install .
+git clone https://github.com/neo-cod3/gemini-notebook-mcp-cli-fork
+cd gemini-notebook-mcp-cli-fork
+uv venv
+uv pip install -e .
 ```
 
 ## Authentication
 
 **Preferred: Run the automated authentication CLI:**
 ```bash
-nlm login
+uv run nlm login
 ```
 This launches Chrome, you log in, and cookies are extracted automatically. Your login is saved to a Chrome profile for future use.
 
@@ -46,7 +41,7 @@ The server now automatically handles token expiration:
 2. Reloads cookies from disk if updated externally
 3. Runs headless Chrome auth if profile has saved login
 
-If headless auth fails (Google login fully expired), you'll see a message to run `nlm login` again.
+If headless auth fails (Google login fully expired), you'll see a message to run `uv run nlm login` again.
 
 **Explicit refresh (MCP tool):**
 ```
@@ -70,23 +65,18 @@ Cookies last for weeks. The server auto-refreshes as long as Chrome profile logi
 
 ### Building and Running
 
-**Reinstalling after changes:**
-Because `uv tool install` installs into an isolated environment, you must reinstall to see changes during development.
-```bash
-uv cache clean
-uv tool install --force .
-```
+Because the package is installed in editable mode (`uv pip install -e .`) inside `.venv`, code changes take effect immediately without reinstalling.
 
-**Running the Server:**
+**Running the CLI & Server:**
 ```bash
-# Standard mode (stdio)
-notebooklm-mcp
+# CLI
+uv run nlm --help
+
+# MCP server (stdio)
+uv run notebooklm-mcp
 
 # Debug mode (verbose logging)
-notebooklm-mcp --debug
-
-# HTTP Server mode
-notebooklm-mcp --transport http --port 8000
+uv run notebooklm-mcp --debug
 ```
 
 ### Testing

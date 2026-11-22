@@ -11,20 +11,19 @@ Tested with personal/free tier accounts. May work with Google Workspace accounts
 ## Development Commands
 
 ```bash
-# Install dependencies
-uv tool install .
+# Install dependencies locally in .venv (do NOT install globally)
+uv venv
+uv pip install -e .
 
-# Reinstall after code changes (ALWAYS clean cache first)
-uv cache clean && uv tool install --force .
+# Run CLI / MCP server from local .venv
+.venv/bin/nlm --help
+uv run nlm --help
 
 # Run the MCP server (stdio)
-notebooklm-mcp
+uv run notebooklm-mcp
 
 # Run with Debug logging
-notebooklm-mcp --debug
-
-# Run as HTTP server
-notebooklm-mcp --transport http --port 8000
+uv run notebooklm-mcp --debug
 
 # Run tests
 uv run pytest
