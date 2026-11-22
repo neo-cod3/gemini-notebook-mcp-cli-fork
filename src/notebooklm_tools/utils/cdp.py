@@ -980,6 +980,10 @@ def launch_chrome_process(
     if platform.system() == "Windows":
         args.append("--disable-features=msEdgeStartupBoost")
 
+    from notebooklm_tools.utils.browser_lock import get_browser_lock_args
+
+    args.extend(get_browser_lock_args())
+
     if headless:
         args.append("--headless=new")
 
@@ -1771,6 +1775,10 @@ def extract_cookies_from_page(
     while True:
         try:
             current_url = get_current_url(ws_url)
+            from notebooklm_tools.utils.browser_lock import enforce_cdp_url_lock
+
+            if enforce_cdp_url_lock(ws_url, current_url, get_notebooklm_url(), navigate_to_url):
+                continue
             if is_logged_in(current_url):
                 html = get_page_html(ws_url)
                 cookies = get_page_cookies(ws_url)

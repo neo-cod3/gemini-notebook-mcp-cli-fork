@@ -515,6 +515,18 @@ class AuthConfig(BaseModel):
         description="Optional path to a Chromium-compatible browser executable",
     )
     default_profile: str = Field(default="default", description="Default profile name")
+    browser_lock_mode: str = Field(
+        default="off",
+        description="Browser URL lock mode during auth: off, allowlist, blocklist",
+    )
+    browser_lock_allow: str = Field(
+        default="",
+        description="Comma-separated extra hostnames/wildcards to allow in allowlist mode",
+    )
+    browser_lock_block: str = Field(
+        default="",
+        description="Comma-separated extra hostnames/wildcards to block in blocklist mode",
+    )
 
 
 class Config(BaseModel):
