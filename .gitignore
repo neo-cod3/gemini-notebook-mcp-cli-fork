@@ -83,7 +83,6 @@ notebooklm-mcp-*.mcpb
 
 # Agent config (local, not project source)
 .agent/
-.agents/
 
 # Claude / AI assistant settings
 .claude_settings.json
