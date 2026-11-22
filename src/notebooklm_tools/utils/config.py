@@ -774,6 +774,12 @@ def save_config(config: Config) -> None:
         doc["auth"]["browser_path"] = config.auth.browser_path
     if not os.environ.get("NLM_PROFILE") and not _session_profile:
         doc["auth"]["default_profile"] = config.auth.default_profile
+    if not os.environ.get("NLM_BROWSER_LOCK_MODE"):
+        doc["auth"]["browser_lock_mode"] = config.auth.browser_lock_mode
+    if not os.environ.get("NLM_BROWSER_LOCK_ALLOW"):
+        doc["auth"]["browser_lock_allow"] = config.auth.browser_lock_allow
+    if not os.environ.get("NLM_BROWSER_LOCK_BLOCK"):
+        doc["auth"]["browser_lock_block"] = config.auth.browser_lock_block
 
     temp_file = config_file.parent / f"config.toml.tmp.{os.getpid()}"
     with open(temp_file, "w", encoding="utf-8") as f:
@@ -797,6 +803,9 @@ def _config_to_toml(config: Config) -> str:
     lines.append(f'browser = "{config.auth.browser}"')
     lines.append(f"browser_path = {json.dumps(config.auth.browser_path)}")
     lines.append(f'default_profile = "{config.auth.default_profile}"')
+    lines.append(f"browser_lock_mode = {json.dumps(config.auth.browser_lock_mode)}")
+    lines.append(f"browser_lock_allow = {json.dumps(config.auth.browser_lock_allow)}")
+    lines.append(f"browser_lock_block = {json.dumps(config.auth.browser_lock_block)}")
     lines.append("")
 
     return "\n".join(lines)

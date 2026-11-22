@@ -136,3 +136,26 @@ def test_chrome_policy_payload_and_export(tmp_path) -> None:
     loaded = json.loads(out_file.read_text(encoding="utf-8"))
     assert "myaccount.google.com" in loaded["URLBlocklist"]
     assert "URLAllowlist" not in loaded
+
+
+def test_save_config_persists_browser_lock_settings(tmp_path, monkeypatch) -> None:
+    from notebooklm_tools.utils import config as config_mod
+
+    monkeypatch.setenv("NOTEBOOKLM_MCP_CLI_PATH", str(tmp_path))
+    monkeypatch.delenv("NLM_BROWSER_LOCK_MODE", raising=False)
+    monkeypatch.delenv("NLM_BROWSER_LOCK_ALLOW", raising=False)
+    monkeypatch.delenv("NLM_BROWSER_LOCK_BLOCK", raising=False)
+    config_mod.reset_config()
+
+    cfg = config_mod.load_config()
+    cfg.auth.browser_lock_mode = "allowlist"
+    cfg.auth.browser_lock_allow = "gds.google.com"
+    cfg.auth.browser_lock_block = "evil.example"
+    config_mod.save_config(cfg)
+
+    config_mod.reset_config()
+    reloaded = config_mod.load_config()
+    assert reloaded.auth.browser_lock_mode == "allowlist"
+    assert reloaded.auth.browser_lock_allow == "gds.google.com"
+    assert reloaded.auth.browser_lock_block == "evil.example"
+    config_mod.reset_config()
